@@ -1,5 +1,43 @@
 #compdef _fargate fargate
 
+# custom completion functions
+function _fargate_completion_region {
+  _values 'region' us-east-1 us-east-2 us-west-2 ap-southeast-1 ap-southeast-2 ap-northeast-1 eu-central-1 eu-west-1
+}
+
+function _fargate_completion_certificate {
+  certificates=($(fargate certificate list | tail -n +2 | cut -f1 | sed "s_*_\\\*_g"))
+  [ -z "$certificates" ] || _values 'certificate' $certificates
+}
+
+function _fargate_completion_log {
+  logs=($(aws logs describe-log-groups | jq -r '.logGroups[].logGroupName | select(startswith("'$1'")) | sub("'$1'" ;"")'))
+  [ -z "$logs" ] || _values 'log' $logs
+}
+
+function _fargate_completion_service {
+  services=($(fargate service list | tail -n +2 | cut -f1))
+  [ -z "$services" ] || _values 'service' $services
+}
+
+function _fargate_completion_task {
+  tasks=($(fargate task list | tail -n +2 | cut -f1))
+  [ -z "$tasks" ] || _values 'task' $tasks
+}
+
+function _fargate_completion_loadbalancer {
+  loadbalancers=($(fargate lb list | tail -n +2 | cut -f1))
+  [ -z "$loadbalancers" ] || _values 'loadbalancer' $loadbalancers
+}
+
+function _fargate_completion_cpu {
+  _values 'cpu' 256 512 1024 2048 4096
+}
+
+function _fargate_completion_memory {
+  _values 'memory' 512 1024 2048 3072 4096 5120 6144 7168 8192 9216 10240 11264 12288 13312 14336 15360 16348
+}
+
 
 function _fargate {
   local -a commands
@@ -7,7 +45,7 @@ function _fargate {
   _arguments -C \
     '--cluster[ECS cluster name (default "fargate")]:' \
     '--no-color[Disable color output]' \
-    '--region[AWS region (default "us-east-1")]:' \
+    '--region[AWS region (default "us-east-1")]:region:_fargate_completion_region' \
     '(-v --verbose)'{-v,--verbose}'[Verbose output]' \
     "1: :->cmnds" \
     "*::arg:->args"
@@ -16,7 +54,7 @@ function _fargate {
   cmnds)
     commands=(
       "certificate:Manage certificates"
-      "completion:A brief description of your command"
+      #"completion:A brief description of your command"
       "help:Help about any command"
       "lb:Manage load balancers"
       "service:Manage services"
@@ -55,7 +93,7 @@ function _fargate_certificate {
   _arguments -C \
     '--cluster[ECS cluster name (default "fargate")]:' \
     '--no-color[Disable color output]' \
-    '--region[AWS region (default "us-east-1")]:' \
+    '--region[AWS region (default "us-east-1")]:region:_fargate_completion_region' \
     '(-v --verbose)'{-v,--verbose}'[Verbose output]' \
     "1: :->cmnds" \
     "*::arg:->args"
@@ -97,10 +135,11 @@ function _fargate_certificate {
 }
 
 function _fargate_certificate_destroy {
+  _fargate_completion_certificate
   _arguments \
     '--cluster[ECS cluster name (default "fargate")]:' \
     '--no-color[Disable color output]' \
-    '--region[AWS region (default "us-east-1")]:' \
+    '--region[AWS region (default "us-east-1")]:region:_fargate_completion_region' \
     '(-v --verbose)'{-v,--verbose}'[Verbose output]'
 }
 
@@ -111,15 +150,16 @@ function _fargate_certificate_import {
     '(-k --key)'{-k,--key}'[Filename of the private key used to generate the certificate]:' \
     '--cluster[ECS cluster name (default "fargate")]:' \
     '--no-color[Disable color output]' \
-    '--region[AWS region (default "us-east-1")]:' \
+    '--region[AWS region (default "us-east-1")]:region:_fargate_completion_region' \
     '(-v --verbose)'{-v,--verbose}'[Verbose output]'
 }
 
 function _fargate_certificate_info {
+  _fargate_completion_certificate
   _arguments \
     '--cluster[ECS cluster name (default "fargate")]:' \
     '--no-color[Disable color output]' \
-    '--region[AWS region (default "us-east-1")]:' \
+    '--region[AWS region (default "us-east-1")]:region:_fargate_completion_region' \
     '(-v --verbose)'{-v,--verbose}'[Verbose output]'
 }
 
@@ -127,7 +167,7 @@ function _fargate_certificate_list {
   _arguments \
     '--cluster[ECS cluster name (default "fargate")]:' \
     '--no-color[Disable color output]' \
-    '--region[AWS region (default "us-east-1")]:' \
+    '--region[AWS region (default "us-east-1")]:region:_fargate_completion_region' \
     '(-v --verbose)'{-v,--verbose}'[Verbose output]'
 }
 
@@ -136,7 +176,7 @@ function _fargate_certificate_request {
     '(*-a *--alias)'{\*-a,\*--alias}'[Additional domain names to be included in the certificate (can be specified multiple times)]:' \
     '--cluster[ECS cluster name (default "fargate")]:' \
     '--no-color[Disable color output]' \
-    '--region[AWS region (default "us-east-1")]:' \
+    '--region[AWS region (default "us-east-1")]:region:_fargate_completion_region' \
     '(-v --verbose)'{-v,--verbose}'[Verbose output]'
 }
 
@@ -144,7 +184,7 @@ function _fargate_certificate_validate {
   _arguments \
     '--cluster[ECS cluster name (default "fargate")]:' \
     '--no-color[Disable color output]' \
-    '--region[AWS region (default "us-east-1")]:' \
+    '--region[AWS region (default "us-east-1")]:region:_fargate_completion_region' \
     '(-v --verbose)'{-v,--verbose}'[Verbose output]'
 }
 
@@ -153,7 +193,7 @@ function _fargate_completion {
     '(-h --help)'{-h,--help}'[help for completion]' \
     '--cluster[ECS cluster name (default "fargate")]:' \
     '--no-color[Disable color output]' \
-    '--region[AWS region (default "us-east-1")]:' \
+    '--region[AWS region (default "us-east-1")]:region:_fargate_completion_region' \
     '(-v --verbose)'{-v,--verbose}'[Verbose output]'
 }
 
@@ -161,7 +201,7 @@ function _fargate_help {
   _arguments \
     '--cluster[ECS cluster name (default "fargate")]:' \
     '--no-color[Disable color output]' \
-    '--region[AWS region (default "us-east-1")]:' \
+    '--region[AWS region (default "us-east-1")]:region:_fargate_completion_region' \
     '(-v --verbose)'{-v,--verbose}'[Verbose output]'
 }
 
@@ -172,7 +212,7 @@ function _fargate_lb {
   _arguments -C \
     '--cluster[ECS cluster name (default "fargate")]:' \
     '--no-color[Disable color output]' \
-    '--region[AWS region (default "us-east-1")]:' \
+    '--region[AWS region (default "us-east-1")]:region:_fargate_completion_region' \
     '(-v --verbose)'{-v,--verbose}'[Verbose output]' \
     "1: :->cmnds" \
     "*::arg:->args"
@@ -210,10 +250,11 @@ function _fargate_lb {
 }
 
 function _fargate_lb_alias {
+  _fargate_completion_loadbalancer
   _arguments \
     '--cluster[ECS cluster name (default "fargate")]:' \
     '--no-color[Disable color output]' \
-    '--region[AWS region (default "us-east-1")]:' \
+    '--region[AWS region (default "us-east-1")]:region:_fargate_completion_region' \
     '(-v --verbose)'{-v,--verbose}'[Verbose output]'
 }
 
@@ -225,23 +266,25 @@ function _fargate_lb_create {
     '*--subnet-id[ID of a subnet to place the load balancer (can be specified multiple times)]:' \
     '--cluster[ECS cluster name (default "fargate")]:' \
     '--no-color[Disable color output]' \
-    '--region[AWS region (default "us-east-1")]:' \
+    '--region[AWS region (default "us-east-1")]:region:_fargate_completion_region' \
     '(-v --verbose)'{-v,--verbose}'[Verbose output]'
 }
 
 function _fargate_lb_destroy {
+  _fargate_completion_loadbalancer
   _arguments \
     '--cluster[ECS cluster name (default "fargate")]:' \
     '--no-color[Disable color output]' \
-    '--region[AWS region (default "us-east-1")]:' \
+    '--region[AWS region (default "us-east-1")]:region:_fargate_completion_region' \
     '(-v --verbose)'{-v,--verbose}'[Verbose output]'
 }
 
 function _fargate_lb_info {
+  _fargate_completion_loadbalancer
   _arguments \
     '--cluster[ECS cluster name (default "fargate")]:' \
     '--no-color[Disable color output]' \
-    '--region[AWS region (default "us-east-1")]:' \
+    '--region[AWS region (default "us-east-1")]:region:_fargate_completion_region' \
     '(-v --verbose)'{-v,--verbose}'[Verbose output]'
 }
 
@@ -249,7 +292,7 @@ function _fargate_lb_list {
   _arguments \
     '--cluster[ECS cluster name (default "fargate")]:' \
     '--no-color[Disable color output]' \
-    '--region[AWS region (default "us-east-1")]:' \
+    '--region[AWS region (default "us-east-1")]:region:_fargate_completion_region' \
     '(-v --verbose)'{-v,--verbose}'[Verbose output]'
 }
 
@@ -260,7 +303,7 @@ function _fargate_service {
   _arguments -C \
     '--cluster[ECS cluster name (default "fargate")]:' \
     '--no-color[Disable color output]' \
-    '--region[AWS region (default "us-east-1")]:' \
+    '--region[AWS region (default "us-east-1")]:region:_fargate_completion_region' \
     '(-v --verbose)'{-v,--verbose}'[Verbose output]' \
     "1: :->cmnds" \
     "*::arg:->args"
@@ -323,11 +366,11 @@ function _fargate_service {
 
 function _fargate_service_create {
   _arguments \
-    '(-c --cpu)'{-c,--cpu}'[Amount of cpu units to allocate for each task]:' \
+    '(-c --cpu)'{-c,--cpu}'[Amount of cpu units to allocate for each task]:cpu:_fargate_completion_cpu' \
     '(*-e *--env)'{\*-e,\*--env}'[Environment variables to set \[e.g. KEY=value\] (can be specified multiple times)]:' \
     '(-i --image)'{-i,--image}'[Docker image to run in the service; if omitted Fargate will build an image from the Dockerfile in the current directory]:' \
     '(-l --lb)'{-l,--lb}'[Name of a load balancer to use]:' \
-    '(-m --memory)'{-m,--memory}'[Amount of MiB to allocate for each task]:' \
+    '(-m --memory)'{-m,--memory}'[Amount of MiB to allocate for each task]:memory:_fargate_completion_memory' \
     '(-n --num)'{-n,--num}'[Number of tasks instances to keep running]:' \
     '(-p --port)'{-p,--port}'[Port to listen on \[e.g., 80, 443, http:8080, https:8443, tcp:1935\]]:' \
     '(*-r *--rule)'{\*-r,\*--rule}'[Routing rule for the load balancer \[e.g. host=api.example.com, path=/api/*\]; if omitted service will be the default route (can be specified multiple times)]:' \
@@ -336,7 +379,7 @@ function _fargate_service_create {
     '--task-role[Name or ARN of an IAM role that the service'\''s tasks can assume]:' \
     '--cluster[ECS cluster name (default "fargate")]:' \
     '--no-color[Disable color output]' \
-    '--region[AWS region (default "us-east-1")]:' \
+    '--region[AWS region (default "us-east-1")]:region:_fargate_completion_region' \
     '(-v --verbose)'{-v,--verbose}'[Verbose output]'
 }
 
@@ -345,15 +388,16 @@ function _fargate_service_deploy {
     '(-i --image)'{-i,--image}'[Docker image to run in the service; if omitted Fargate will build an image from the Dockerfile in the current directory]:' \
     '--cluster[ECS cluster name (default "fargate")]:' \
     '--no-color[Disable color output]' \
-    '--region[AWS region (default "us-east-1")]:' \
+    '--region[AWS region (default "us-east-1")]:region:_fargate_completion_region' \
     '(-v --verbose)'{-v,--verbose}'[Verbose output]'
 }
 
 function _fargate_service_destroy {
+  _fargate_completion_service 
   _arguments \
     '--cluster[ECS cluster name (default "fargate")]:' \
     '--no-color[Disable color output]' \
-    '--region[AWS region (default "us-east-1")]:' \
+    '--region[AWS region (default "us-east-1")]:region:_fargate_completion_region' \
     '(-v --verbose)'{-v,--verbose}'[Verbose output]'
 }
 
@@ -364,7 +408,7 @@ function _fargate_service_env {
   _arguments -C \
     '--cluster[ECS cluster name (default "fargate")]:' \
     '--no-color[Disable color output]' \
-    '--region[AWS region (default "us-east-1")]:' \
+    '--region[AWS region (default "us-east-1")]:region:_fargate_completion_region' \
     '(-v --verbose)'{-v,--verbose}'[Verbose output]' \
     "1: :->cmnds" \
     "*::arg:->args"
@@ -394,10 +438,11 @@ function _fargate_service_env {
 }
 
 function _fargate_service_env_list {
+  _fargate_completion_service
   _arguments \
     '--cluster[ECS cluster name (default "fargate")]:' \
     '--no-color[Disable color output]' \
-    '--region[AWS region (default "us-east-1")]:' \
+    '--region[AWS region (default "us-east-1")]:region:_fargate_completion_region' \
     '(-v --verbose)'{-v,--verbose}'[Verbose output]'
 }
 
@@ -406,7 +451,7 @@ function _fargate_service_env_set {
     '(*-e *--env)'{\*-e,\*--env}'[Environment variables to set \[e.g. KEY=value\]]:' \
     '--cluster[ECS cluster name (default "fargate")]:' \
     '--no-color[Disable color output]' \
-    '--region[AWS region (default "us-east-1")]:' \
+    '--region[AWS region (default "us-east-1")]:region:_fargate_completion_region' \
     '(-v --verbose)'{-v,--verbose}'[Verbose output]'
 }
 
@@ -415,15 +460,16 @@ function _fargate_service_env_unset {
     '(*-k *--key)'{\*-k,\*--key}'[Environment variable keys to unset \[e.g. KEY, NGINX_PORT\]]:' \
     '--cluster[ECS cluster name (default "fargate")]:' \
     '--no-color[Disable color output]' \
-    '--region[AWS region (default "us-east-1")]:' \
+    '--region[AWS region (default "us-east-1")]:region:_fargate_completion_region' \
     '(-v --verbose)'{-v,--verbose}'[Verbose output]'
 }
 
 function _fargate_service_info {
+  _fargate_completion_service
   _arguments \
     '--cluster[ECS cluster name (default "fargate")]:' \
     '--no-color[Disable color output]' \
-    '--region[AWS region (default "us-east-1")]:' \
+    '--region[AWS region (default "us-east-1")]:region:_fargate_completion_region' \
     '(-v --verbose)'{-v,--verbose}'[Verbose output]'
 }
 
@@ -431,11 +477,12 @@ function _fargate_service_list {
   _arguments \
     '--cluster[ECS cluster name (default "fargate")]:' \
     '--no-color[Disable color output]' \
-    '--region[AWS region (default "us-east-1")]:' \
+    '--region[AWS region (default "us-east-1")]:region:_fargate_completion_region' \
     '(-v --verbose)'{-v,--verbose}'[Verbose output]'
 }
 
 function _fargate_service_logs {
+  _fargate_completion_log '/fargate/service/'
   _arguments \
     '--end[Latest time to return logs (e.g. 3y, 2021-01-20 12:00:00 EST]:' \
     '--filter[Filter pattern to apply]:' \
@@ -444,41 +491,45 @@ function _fargate_service_logs {
     '(*-t *--task)'{\*-t,\*--task}'[Show logs from specific task (can be specified multiple times)]:' \
     '--cluster[ECS cluster name (default "fargate")]:' \
     '--no-color[Disable color output]' \
-    '--region[AWS region (default "us-east-1")]:' \
+    '--region[AWS region (default "us-east-1")]:region:_fargate_completion_region' \
     '(-v --verbose)'{-v,--verbose}'[Verbose output]'
 }
 
 function _fargate_service_ps {
+  _fargate_completion_service
   _arguments \
     '--cluster[ECS cluster name (default "fargate")]:' \
     '--no-color[Disable color output]' \
-    '--region[AWS region (default "us-east-1")]:' \
+    '--region[AWS region (default "us-east-1")]:region:_fargate_completion_region' \
     '(-v --verbose)'{-v,--verbose}'[Verbose output]'
 }
 
 function _fargate_service_restart {
+  _fargate_completion_service
   _arguments \
     '--cluster[ECS cluster name (default "fargate")]:' \
     '--no-color[Disable color output]' \
-    '--region[AWS region (default "us-east-1")]:' \
+    '--region[AWS region (default "us-east-1")]:region:_fargate_completion_region' \
     '(-v --verbose)'{-v,--verbose}'[Verbose output]'
 }
 
 function _fargate_service_scale {
+  _fargate_completion_service
   _arguments \
     '--cluster[ECS cluster name (default "fargate")]:' \
     '--no-color[Disable color output]' \
-    '--region[AWS region (default "us-east-1")]:' \
+    '--region[AWS region (default "us-east-1")]:region:_fargate_completion_region' \
     '(-v --verbose)'{-v,--verbose}'[Verbose output]'
 }
 
 function _fargate_service_update {
+  _fargate_completion_service
   _arguments \
-    '(-c --cpu)'{-c,--cpu}'[Amount of cpu units to allocate for each task]:' \
-    '(-m --memory)'{-m,--memory}'[Amount of MiB to allocate for each task]:' \
+    '(-c --cpu)'{-c,--cpu}'[Amount of cpu units to allocate for each task]:cpu:_fargate_completion_cpu' \
+    '(-m --memory)'{-m,--memory}'[Amount of MiB to allocate for each task]:memory:_fargate_completion_memory' \
     '--cluster[ECS cluster name (default "fargate")]:' \
     '--no-color[Disable color output]' \
-    '--region[AWS region (default "us-east-1")]:' \
+    '--region[AWS region (default "us-east-1")]:region:_fargate_completion_region' \
     '(-v --verbose)'{-v,--verbose}'[Verbose output]'
 }
 
@@ -489,7 +540,7 @@ function _fargate_task {
   _arguments -C \
     '--cluster[ECS cluster name (default "fargate")]:' \
     '--no-color[Disable color output]' \
-    '--region[AWS region (default "us-east-1")]:' \
+    '--region[AWS region (default "us-east-1")]:region:_fargate_completion_region' \
     '(-v --verbose)'{-v,--verbose}'[Verbose output]' \
     "1: :->cmnds" \
     "*::arg:->args"
@@ -531,11 +582,12 @@ function _fargate_task {
 }
 
 function _fargate_task_info {
+  _fargate_completion_task
   _arguments \
     '(*-t *--task)'{\*-t,\*--task}'[Get info for specific task instances (can be specified multiple times)]:' \
     '--cluster[ECS cluster name (default "fargate")]:' \
     '--no-color[Disable color output]' \
-    '--region[AWS region (default "us-east-1")]:' \
+    '--region[AWS region (default "us-east-1")]:region:_fargate_completion_region' \
     '(-v --verbose)'{-v,--verbose}'[Verbose output]'
 }
 
@@ -543,11 +595,12 @@ function _fargate_task_list {
   _arguments \
     '--cluster[ECS cluster name (default "fargate")]:' \
     '--no-color[Disable color output]' \
-    '--region[AWS region (default "us-east-1")]:' \
+    '--region[AWS region (default "us-east-1")]:region:_fargate_completion_region' \
     '(-v --verbose)'{-v,--verbose}'[Verbose output]'
 }
 
 function _fargate_task_logs {
+  _fargate_completion_log '/fargate/task/'
   _arguments \
     '--end[Latest time to return logs (e.g. 3y, 2021-01-20 12:00:00 EST]:' \
     '--filter[Filter pattern to apply]:' \
@@ -556,40 +609,42 @@ function _fargate_task_logs {
     '(*-t *--task)'{\*-t,\*--task}'[Show logs from specific task (can be specified multiple times)]:' \
     '--cluster[ECS cluster name (default "fargate")]:' \
     '--no-color[Disable color output]' \
-    '--region[AWS region (default "us-east-1")]:' \
+    '--region[AWS region (default "us-east-1")]:region:_fargate_completion_region' \
     '(-v --verbose)'{-v,--verbose}'[Verbose output]'
 }
 
 function _fargate_task_ps {
+  _fargate_completion_task
   _arguments \
     '--cluster[ECS cluster name (default "fargate")]:' \
     '--no-color[Disable color output]' \
-    '--region[AWS region (default "us-east-1")]:' \
+    '--region[AWS region (default "us-east-1")]:region:_fargate_completion_region' \
     '(-v --verbose)'{-v,--verbose}'[Verbose output]'
 }
 
 function _fargate_task_run {
   _arguments \
-    '(-c --cpu)'{-c,--cpu}'[Amount of cpu units to allocate for each task]:' \
+    '(-c --cpu)'{-c,--cpu}'[Amount of cpu units to allocate for each task]:cpu:_fargate_completion_cpu' \
     '(*-e *--env)'{\*-e,\*--env}'[Environment variables to set \[e.g. KEY=value\] (can be specified multiple times)]:' \
     '(-i --image)'{-i,--image}'[Docker image to run; if omitted Fargate will build an image from the Dockerfile in the current directory]:' \
-    '(-m --memory)'{-m,--memory}'[Amount of MiB to allocate for each task]:' \
+    '(-m --memory)'{-m,--memory}'[Amount of MiB to allocate for each task]:memory:_fargate_completion_memory' \
     '(-n --num)'{-n,--num}'[Number of task instances to run]:' \
     '*--security-group-id[ID of a security group to apply to the task (can be specified multiple times)]:' \
     '*--subnet-id[ID of a subnet in which to place the task (can be specified multiple times)]:' \
     '--task-role[Name or ARN of an IAM role that the tasks can assume]:' \
     '--cluster[ECS cluster name (default "fargate")]:' \
     '--no-color[Disable color output]' \
-    '--region[AWS region (default "us-east-1")]:' \
+    '--region[AWS region (default "us-east-1")]:region:_fargate_completion_region' \
     '(-v --verbose)'{-v,--verbose}'[Verbose output]'
 }
 
 function _fargate_task_stop {
+  _fargate_completion_task
   _arguments \
     '(*-t *--task)'{\*-t,\*--task}'[Stop specific task instances (can be specified multiple times)]:' \
     '--cluster[ECS cluster name (default "fargate")]:' \
     '--no-color[Disable color output]' \
-    '--region[AWS region (default "us-east-1")]:' \
+    '--region[AWS region (default "us-east-1")]:region:_fargate_completion_region' \
     '(-v --verbose)'{-v,--verbose}'[Verbose output]'
 }
 
