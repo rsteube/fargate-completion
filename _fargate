@@ -187,6 +187,7 @@ function _fargate_certificate_request {
 }
 
 function _fargate_certificate_validate {
+  _fargate_completion_certificate
   _arguments \
     '--cluster[ECS cluster name (default "fargate")]:' \
     '--no-color[Disable color output]' \
@@ -375,11 +376,11 @@ function _fargate_service_create {
     '(-c --cpu)'{-c,--cpu}'[Amount of cpu units to allocate for each task]:cpu:_fargate_completion_cpu' \
     '(*-e *--env)'{\*-e,\*--env}'[Environment variables to set \[e.g. KEY=value\] (can be specified multiple times)]:' \
     '(-i --image)'{-i,--image}'[Docker image to run in the service; if omitted Fargate will build an image from the Dockerfile in the current directory]:' \
-    '(-l --lb)'{-l,--lb}'[Name of a load balancer to use]:' \
+    '(-l --lb)'{-l,--lb}'[Name of a load balancer to use]:loadbalancer:_fargate_completion_loadbalancer' \
     '(-m --memory)'{-m,--memory}'[Amount of MiB to allocate for each task]:memory:_fargate_completion_memory' \
     '(-n --num)'{-n,--num}'[Number of tasks instances to keep running]:' \
     '(-p --port)'{-p,--port}'[Port to listen on \[e.g., 80, 443, http:8080, https:8443, tcp:1935\]]:' \
-    '(*-r *--rule)'{\*-r,\*--rule}'[Routing rule for the load balancer \[e.g. host=api.example.com, path=/api/*\]; if omitted service will be the default route (can be specified multiple times)]:' \
+    '(*-r *--rule)'{\*-r,\*--rule}'[Routing rule for the load balancer \[e.g. host=api.example.com, path=/api/*\]; if omitted service will be the default route (can be specified multiple times)]:rule:(host= path=)' \
     '*--security-group-id[ID of a security group to apply to the service (can be specified multiple times)]:' \
     '*--subnet-id[ID of a subnet in which to place the service (can be specified multiple times)]:' \
     '--task-role[Name or ARN of an IAM role that the service'\''s tasks can assume]:' \
