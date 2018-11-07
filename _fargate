@@ -165,9 +165,9 @@ function _fargate_certificate_destroy {
 
 function _fargate_certificate_import {
   _arguments \
-    '(-c --certificate)'{-c,--certificate}'[Filename of the certificate to import]:' \
-    '--chain[Filename of intermediate certificate chain]:' \
-    '(-k --key)'{-k,--key}'[Filename of the private key used to generate the certificate]:' \
+    '(-c --certificate)'{-c,--certificate}'[Filename of the certificate to import]:file:_files' \
+    '--chain[Filename of intermediate certificate chain]:file:_files' \
+    '(-k --key)'{-k,--key}'[Filename of the private key used to generate the certificate]:file:_files' \
     '--cluster[ECS cluster name (default "fargate")]:cluster:_fargate_completion_cluster' \
     '--no-color[Disable color output]' \
     '--region[AWS region (default "us-east-1")]:region:_fargate_completion_region' \
