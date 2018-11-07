@@ -63,6 +63,12 @@ function _fargate_completion_subnet {
   [ -z "$subnets" ] || _describe 'subnet' subnets
 }
 
+function _fargate_completion_image {
+  images=($(aws ecr describe-repositories | jq -r '.repositories[].repositoryUri'))
+  [ -z "$images" ] || _values 'image' $images
+}
+
+
 function _fargate {
   local -a commands
 
@@ -394,7 +400,7 @@ function _fargate_service_create {
   _arguments \
     '(-c --cpu)'{-c,--cpu}'[Amount of cpu units to allocate for each task]:cpu:_fargate_completion_cpu' \
     '(*-e *--env)'{\*-e,\*--env}'[Environment variables to set \[e.g. KEY=value\] (can be specified multiple times)]:' \
-    '(-i --image)'{-i,--image}'[Docker image to run in the service; if omitted Fargate will build an image from the Dockerfile in the current directory]:' \
+    '(-i --image)'{-i,--image}'[Docker image to run in the service; if omitted Fargate will build an image from the Dockerfile in the current directory]:image:_fargate_completion_image' \
     '(-l --lb)'{-l,--lb}'[Name of a load balancer to use]:loadbalancer:_fargate_completion_loadbalancer' \
     '(-m --memory)'{-m,--memory}'[Amount of MiB to allocate for each task]:memory:_fargate_completion_memory' \
     '(-n --num)'{-n,--num}'[Number of tasks instances to keep running]:' \
@@ -411,7 +417,7 @@ function _fargate_service_create {
 
 function _fargate_service_deploy {
   _arguments \
-    '(-i --image)'{-i,--image}'[Docker image to run in the service; if omitted Fargate will build an image from the Dockerfile in the current directory]:' \
+    '(-i --image)'{-i,--image}'[Docker image to run in the service; if omitted Fargate will build an image from the Dockerfile in the current directory]:image:_fargate_completion_image' \
     '--cluster[ECS cluster name (default "fargate")]:cluster:_fargate_completion_cluster' \
     '--no-color[Disable color output]' \
     '--region[AWS region (default "us-east-1")]:region:_fargate_completion_region' \
@@ -652,7 +658,7 @@ function _fargate_task_run {
   _arguments \
     '(-c --cpu)'{-c,--cpu}'[Amount of cpu units to allocate for each task]:cpu:_fargate_completion_cpu' \
     '(*-e *--env)'{\*-e,\*--env}'[Environment variables to set \[e.g. KEY=value\] (can be specified multiple times)]:' \
-    '(-i --image)'{-i,--image}'[Docker image to run; if omitted Fargate will build an image from the Dockerfile in the current directory]:' \
+    '(-i --image)'{-i,--image}'[Docker image to run; if omitted Fargate will build an image from the Dockerfile in the current directory]:image:_fargate_completion_image' \
     '(-m --memory)'{-m,--memory}'[Amount of MiB to allocate for each task]:memory:_fargate_completion_memory' \
     '(-n --num)'{-n,--num}'[Number of task instances to run]:' \
     '*--security-group-id[ID of a security group to apply to the task (can be specified multiple times)]:group:_fargate_completion_securitygroup' \
