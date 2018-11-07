@@ -54,8 +54,8 @@ function _fargate_completion_cluster {
 }
 
 function _fargate_completion_securitygroup {
-  groups=($(aws ec2 describe-security-groups | jq -r '.SecurityGroups[] | .GroupName'))
-  [ -z "$groups" ] || _values 'group' $groups
+  groups=($(aws ec2 describe-security-groups | jq -r '.SecurityGroups[] | "\(.GroupId):\(.GroupName)"'))
+  [ -z "$groups" ] || _describe 'group' groups
 }
 
 function _fargate_completion_subnet {
