@@ -1,3 +1,4 @@
+# vim: ft=zsh
 #compdef _fargate fargate
 
 # custom completion functions
@@ -267,7 +268,7 @@ function _fargate_lb_alias {
 
 function _fargate_lb_create {
   _arguments \
-    '(*-c *--certificate)'{\*-c,\*--certificate}'[Name of certificate to add (can be specified multiple times)]:' \
+    '(*-c *--certificate)'{\*-c,\*--certificate}'[Name of certificate to add (can be specified multiple times)]:certificate:_fargate_completion_certificate' \
     '(*-p *--port)'{\*-p,\*--port}'[Port to listen on \[e.g., 80, 443, http:8080, https:8443, tcp:1935\] (can be specified multiple times)]:' \
     '*--security-group-id[ID of a security group to apply to the load balancer (can be specified multiple times)]:' \
     '*--subnet-id[ID of a subnet to place the load balancer (can be specified multiple times)]:' \
