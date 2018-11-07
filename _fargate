@@ -68,6 +68,10 @@ function _fargate_completion_image {
   [ -z "$images" ] || _values 'image' $images
 }
 
+function _fargate_completion_role {
+  roles=($(aws iam list-roles | jq -r '.Roles[].RoleName'))
+  [ -z "$roles" ] || _values 'role' $roles
+}
 
 function _fargate {
   local -a commands
@@ -408,7 +412,7 @@ function _fargate_service_create {
     '(*-r *--rule)'{\*-r,\*--rule}'[Routing rule for the load balancer \[e.g. host=api.example.com, path=/api/*\]; if omitted service will be the default route (can be specified multiple times)]:rule:(host= path=)' \
     '*--security-group-id[ID of a security group to apply to the service (can be specified multiple times)]:group:_fargate_completion_securitygroup' \
     '*--subnet-id[ID of a subnet in which to place the service (can be specified multiple times)]:subnet:_fargate_completion_subnet' \
-    '--task-role[Name or ARN of an IAM role that the service'\''s tasks can assume]:' \
+    '--task-role[Name or ARN of an IAM role that the service'\''s tasks can assume]:role:_fargate_completion_role' \
     '--cluster[ECS cluster name (default "fargate")]:cluster:_fargate_completion_cluster' \
     '--no-color[Disable color output]' \
     '--region[AWS region (default "us-east-1")]:region:_fargate_completion_region' \
@@ -663,7 +667,7 @@ function _fargate_task_run {
     '(-n --num)'{-n,--num}'[Number of task instances to run]:' \
     '*--security-group-id[ID of a security group to apply to the task (can be specified multiple times)]:group:_fargate_completion_securitygroup' \
     '*--subnet-id[ID of a subnet in which to place the task (can be specified multiple times)]:subnet:_fargate_completion_subnet' \
-    '--task-role[Name or ARN of an IAM role that the tasks can assume]:' \
+    '--task-role[Name or ARN of an IAM role that the tasks can assume]:role:_fargate_completion_role' \
     '--cluster[ECS cluster name (default "fargate")]:cluster:_fargate_completion_cluster' \
     '--no-color[Disable color output]' \
     '--region[AWS region (default "us-east-1")]:region:_fargate_completion_region' \
