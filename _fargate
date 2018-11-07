@@ -1,0 +1,595 @@
+#compdef _fargate fargate
+
+
+function _fargate {
+  local -a commands
+
+  _arguments -C \
+    '--cluster[ECS cluster name (default "fargate")]:' \
+    '--no-color[Disable color output]' \
+    '--region[AWS region (default "us-east-1")]:' \
+    '(-v --verbose)'{-v,--verbose}'[Verbose output]' \
+    "1: :->cmnds" \
+    "*::arg:->args"
+
+  case $state in
+  cmnds)
+    commands=(
+      "certificate:Manage certificates"
+      "completion:A brief description of your command"
+      "help:Help about any command"
+      "lb:Manage load balancers"
+      "service:Manage services"
+      "task:Manage tasks"
+    )
+    _describe "command" commands
+    ;;
+  esac
+
+  case "$words[1]" in
+  certificate)
+    _fargate_certificate
+    ;;
+  completion)
+    _fargate_completion
+    ;;
+  help)
+    _fargate_help
+    ;;
+  lb)
+    _fargate_lb
+    ;;
+  service)
+    _fargate_service
+    ;;
+  task)
+    _fargate_task
+    ;;
+  esac
+}
+
+
+function _fargate_certificate {
+  local -a commands
+
+  _arguments -C \
+    '--cluster[ECS cluster name (default "fargate")]:' \
+    '--no-color[Disable color output]' \
+    '--region[AWS region (default "us-east-1")]:' \
+    '(-v --verbose)'{-v,--verbose}'[Verbose output]' \
+    "1: :->cmnds" \
+    "*::arg:->args"
+
+  case $state in
+  cmnds)
+    commands=(
+      "destroy:Destroy certificate"
+      "import:Import a certificate"
+      "info:Inspect certificate"
+      "list:List certificates"
+      "request:Request a certificate"
+      "validate:Validate certificate ownership"
+    )
+    _describe "command" commands
+    ;;
+  esac
+
+  case "$words[1]" in
+  destroy)
+    _fargate_certificate_destroy
+    ;;
+  import)
+    _fargate_certificate_import
+    ;;
+  info)
+    _fargate_certificate_info
+    ;;
+  list)
+    _fargate_certificate_list
+    ;;
+  request)
+    _fargate_certificate_request
+    ;;
+  validate)
+    _fargate_certificate_validate
+    ;;
+  esac
+}
+
+function _fargate_certificate_destroy {
+  _arguments \
+    '--cluster[ECS cluster name (default "fargate")]:' \
+    '--no-color[Disable color output]' \
+    '--region[AWS region (default "us-east-1")]:' \
+    '(-v --verbose)'{-v,--verbose}'[Verbose output]'
+}
+
+function _fargate_certificate_import {
+  _arguments \
+    '(-c --certificate)'{-c,--certificate}'[Filename of the certificate to import]:' \
+    '--chain[Filename of intermediate certificate chain]:' \
+    '(-k --key)'{-k,--key}'[Filename of the private key used to generate the certificate]:' \
+    '--cluster[ECS cluster name (default "fargate")]:' \
+    '--no-color[Disable color output]' \
+    '--region[AWS region (default "us-east-1")]:' \
+    '(-v --verbose)'{-v,--verbose}'[Verbose output]'
+}
+
+function _fargate_certificate_info {
+  _arguments \
+    '--cluster[ECS cluster name (default "fargate")]:' \
+    '--no-color[Disable color output]' \
+    '--region[AWS region (default "us-east-1")]:' \
+    '(-v --verbose)'{-v,--verbose}'[Verbose output]'
+}
+
+function _fargate_certificate_list {
+  _arguments \
+    '--cluster[ECS cluster name (default "fargate")]:' \
+    '--no-color[Disable color output]' \
+    '--region[AWS region (default "us-east-1")]:' \
+    '(-v --verbose)'{-v,--verbose}'[Verbose output]'
+}
+
+function _fargate_certificate_request {
+  _arguments \
+    '(*-a *--alias)'{\*-a,\*--alias}'[Additional domain names to be included in the certificate (can be specified multiple times)]:' \
+    '--cluster[ECS cluster name (default "fargate")]:' \
+    '--no-color[Disable color output]' \
+    '--region[AWS region (default "us-east-1")]:' \
+    '(-v --verbose)'{-v,--verbose}'[Verbose output]'
+}
+
+function _fargate_certificate_validate {
+  _arguments \
+    '--cluster[ECS cluster name (default "fargate")]:' \
+    '--no-color[Disable color output]' \
+    '--region[AWS region (default "us-east-1")]:' \
+    '(-v --verbose)'{-v,--verbose}'[Verbose output]'
+}
+
+function _fargate_completion {
+  _arguments \
+    '(-h --help)'{-h,--help}'[help for completion]' \
+    '--cluster[ECS cluster name (default "fargate")]:' \
+    '--no-color[Disable color output]' \
+    '--region[AWS region (default "us-east-1")]:' \
+    '(-v --verbose)'{-v,--verbose}'[Verbose output]'
+}
+
+function _fargate_help {
+  _arguments \
+    '--cluster[ECS cluster name (default "fargate")]:' \
+    '--no-color[Disable color output]' \
+    '--region[AWS region (default "us-east-1")]:' \
+    '(-v --verbose)'{-v,--verbose}'[Verbose output]'
+}
+
+
+function _fargate_lb {
+  local -a commands
+
+  _arguments -C \
+    '--cluster[ECS cluster name (default "fargate")]:' \
+    '--no-color[Disable color output]' \
+    '--region[AWS region (default "us-east-1")]:' \
+    '(-v --verbose)'{-v,--verbose}'[Verbose output]' \
+    "1: :->cmnds" \
+    "*::arg:->args"
+
+  case $state in
+  cmnds)
+    commands=(
+      "alias:Create a load balancer alias record"
+      "create:Create a load balancer"
+      "destroy:Destroy load balancer"
+      "info:Inspect load balancer"
+      "list:List load balancers"
+    )
+    _describe "command" commands
+    ;;
+  esac
+
+  case "$words[1]" in
+  alias)
+    _fargate_lb_alias
+    ;;
+  create)
+    _fargate_lb_create
+    ;;
+  destroy)
+    _fargate_lb_destroy
+    ;;
+  info)
+    _fargate_lb_info
+    ;;
+  list)
+    _fargate_lb_list
+    ;;
+  esac
+}
+
+function _fargate_lb_alias {
+  _arguments \
+    '--cluster[ECS cluster name (default "fargate")]:' \
+    '--no-color[Disable color output]' \
+    '--region[AWS region (default "us-east-1")]:' \
+    '(-v --verbose)'{-v,--verbose}'[Verbose output]'
+}
+
+function _fargate_lb_create {
+  _arguments \
+    '(*-c *--certificate)'{\*-c,\*--certificate}'[Name of certificate to add (can be specified multiple times)]:' \
+    '(*-p *--port)'{\*-p,\*--port}'[Port to listen on \[e.g., 80, 443, http:8080, https:8443, tcp:1935\] (can be specified multiple times)]:' \
+    '*--security-group-id[ID of a security group to apply to the load balancer (can be specified multiple times)]:' \
+    '*--subnet-id[ID of a subnet to place the load balancer (can be specified multiple times)]:' \
+    '--cluster[ECS cluster name (default "fargate")]:' \
+    '--no-color[Disable color output]' \
+    '--region[AWS region (default "us-east-1")]:' \
+    '(-v --verbose)'{-v,--verbose}'[Verbose output]'
+}
+
+function _fargate_lb_destroy {
+  _arguments \
+    '--cluster[ECS cluster name (default "fargate")]:' \
+    '--no-color[Disable color output]' \
+    '--region[AWS region (default "us-east-1")]:' \
+    '(-v --verbose)'{-v,--verbose}'[Verbose output]'
+}
+
+function _fargate_lb_info {
+  _arguments \
+    '--cluster[ECS cluster name (default "fargate")]:' \
+    '--no-color[Disable color output]' \
+    '--region[AWS region (default "us-east-1")]:' \
+    '(-v --verbose)'{-v,--verbose}'[Verbose output]'
+}
+
+function _fargate_lb_list {
+  _arguments \
+    '--cluster[ECS cluster name (default "fargate")]:' \
+    '--no-color[Disable color output]' \
+    '--region[AWS region (default "us-east-1")]:' \
+    '(-v --verbose)'{-v,--verbose}'[Verbose output]'
+}
+
+
+function _fargate_service {
+  local -a commands
+
+  _arguments -C \
+    '--cluster[ECS cluster name (default "fargate")]:' \
+    '--no-color[Disable color output]' \
+    '--region[AWS region (default "us-east-1")]:' \
+    '(-v --verbose)'{-v,--verbose}'[Verbose output]' \
+    "1: :->cmnds" \
+    "*::arg:->args"
+
+  case $state in
+  cmnds)
+    commands=(
+      "create:Create a service"
+      "deploy:Deploy new image to service"
+      "destroy:Destroy a service"
+      "env:Manage environment variables"
+      "info:Inspect service"
+      "list:List services"
+      "logs:Show logs from tasks in a service"
+      "ps:List running tasks for a service"
+      "restart:Restart service"
+      "scale:Changes the number of tasks running for the service"
+      "update:Update service configuration"
+    )
+    _describe "command" commands
+    ;;
+  esac
+
+  case "$words[1]" in
+  create)
+    _fargate_service_create
+    ;;
+  deploy)
+    _fargate_service_deploy
+    ;;
+  destroy)
+    _fargate_service_destroy
+    ;;
+  env)
+    _fargate_service_env
+    ;;
+  info)
+    _fargate_service_info
+    ;;
+  list)
+    _fargate_service_list
+    ;;
+  logs)
+    _fargate_service_logs
+    ;;
+  ps)
+    _fargate_service_ps
+    ;;
+  restart)
+    _fargate_service_restart
+    ;;
+  scale)
+    _fargate_service_scale
+    ;;
+  update)
+    _fargate_service_update
+    ;;
+  esac
+}
+
+function _fargate_service_create {
+  _arguments \
+    '(-c --cpu)'{-c,--cpu}'[Amount of cpu units to allocate for each task]:' \
+    '(*-e *--env)'{\*-e,\*--env}'[Environment variables to set \[e.g. KEY=value\] (can be specified multiple times)]:' \
+    '(-i --image)'{-i,--image}'[Docker image to run in the service; if omitted Fargate will build an image from the Dockerfile in the current directory]:' \
+    '(-l --lb)'{-l,--lb}'[Name of a load balancer to use]:' \
+    '(-m --memory)'{-m,--memory}'[Amount of MiB to allocate for each task]:' \
+    '(-n --num)'{-n,--num}'[Number of tasks instances to keep running]:' \
+    '(-p --port)'{-p,--port}'[Port to listen on \[e.g., 80, 443, http:8080, https:8443, tcp:1935\]]:' \
+    '(*-r *--rule)'{\*-r,\*--rule}'[Routing rule for the load balancer \[e.g. host=api.example.com, path=/api/*\]; if omitted service will be the default route (can be specified multiple times)]:' \
+    '*--security-group-id[ID of a security group to apply to the service (can be specified multiple times)]:' \
+    '*--subnet-id[ID of a subnet in which to place the service (can be specified multiple times)]:' \
+    '--task-role[Name or ARN of an IAM role that the service'\''s tasks can assume]:' \
+    '--cluster[ECS cluster name (default "fargate")]:' \
+    '--no-color[Disable color output]' \
+    '--region[AWS region (default "us-east-1")]:' \
+    '(-v --verbose)'{-v,--verbose}'[Verbose output]'
+}
+
+function _fargate_service_deploy {
+  _arguments \
+    '(-i --image)'{-i,--image}'[Docker image to run in the service; if omitted Fargate will build an image from the Dockerfile in the current directory]:' \
+    '--cluster[ECS cluster name (default "fargate")]:' \
+    '--no-color[Disable color output]' \
+    '--region[AWS region (default "us-east-1")]:' \
+    '(-v --verbose)'{-v,--verbose}'[Verbose output]'
+}
+
+function _fargate_service_destroy {
+  _arguments \
+    '--cluster[ECS cluster name (default "fargate")]:' \
+    '--no-color[Disable color output]' \
+    '--region[AWS region (default "us-east-1")]:' \
+    '(-v --verbose)'{-v,--verbose}'[Verbose output]'
+}
+
+
+function _fargate_service_env {
+  local -a commands
+
+  _arguments -C \
+    '--cluster[ECS cluster name (default "fargate")]:' \
+    '--no-color[Disable color output]' \
+    '--region[AWS region (default "us-east-1")]:' \
+    '(-v --verbose)'{-v,--verbose}'[Verbose output]' \
+    "1: :->cmnds" \
+    "*::arg:->args"
+
+  case $state in
+  cmnds)
+    commands=(
+      "list:Show environment variables"
+      "set:Set environment variables"
+      "unset:Unset environment variables"
+    )
+    _describe "command" commands
+    ;;
+  esac
+
+  case "$words[1]" in
+  list)
+    _fargate_service_env_list
+    ;;
+  set)
+    _fargate_service_env_set
+    ;;
+  unset)
+    _fargate_service_env_unset
+    ;;
+  esac
+}
+
+function _fargate_service_env_list {
+  _arguments \
+    '--cluster[ECS cluster name (default "fargate")]:' \
+    '--no-color[Disable color output]' \
+    '--region[AWS region (default "us-east-1")]:' \
+    '(-v --verbose)'{-v,--verbose}'[Verbose output]'
+}
+
+function _fargate_service_env_set {
+  _arguments \
+    '(*-e *--env)'{\*-e,\*--env}'[Environment variables to set \[e.g. KEY=value\]]:' \
+    '--cluster[ECS cluster name (default "fargate")]:' \
+    '--no-color[Disable color output]' \
+    '--region[AWS region (default "us-east-1")]:' \
+    '(-v --verbose)'{-v,--verbose}'[Verbose output]'
+}
+
+function _fargate_service_env_unset {
+  _arguments \
+    '(*-k *--key)'{\*-k,\*--key}'[Environment variable keys to unset \[e.g. KEY, NGINX_PORT\]]:' \
+    '--cluster[ECS cluster name (default "fargate")]:' \
+    '--no-color[Disable color output]' \
+    '--region[AWS region (default "us-east-1")]:' \
+    '(-v --verbose)'{-v,--verbose}'[Verbose output]'
+}
+
+function _fargate_service_info {
+  _arguments \
+    '--cluster[ECS cluster name (default "fargate")]:' \
+    '--no-color[Disable color output]' \
+    '--region[AWS region (default "us-east-1")]:' \
+    '(-v --verbose)'{-v,--verbose}'[Verbose output]'
+}
+
+function _fargate_service_list {
+  _arguments \
+    '--cluster[ECS cluster name (default "fargate")]:' \
+    '--no-color[Disable color output]' \
+    '--region[AWS region (default "us-east-1")]:' \
+    '(-v --verbose)'{-v,--verbose}'[Verbose output]'
+}
+
+function _fargate_service_logs {
+  _arguments \
+    '--end[Latest time to return logs (e.g. 3y, 2021-01-20 12:00:00 EST]:' \
+    '--filter[Filter pattern to apply]:' \
+    '(-f --follow)'{-f,--follow}'[Poll logs and continuously print new events]' \
+    '--start[Earliest time to return logs (e.g. -1h, 2018-01-01 09:36:00 EST]:' \
+    '(*-t *--task)'{\*-t,\*--task}'[Show logs from specific task (can be specified multiple times)]:' \
+    '--cluster[ECS cluster name (default "fargate")]:' \
+    '--no-color[Disable color output]' \
+    '--region[AWS region (default "us-east-1")]:' \
+    '(-v --verbose)'{-v,--verbose}'[Verbose output]'
+}
+
+function _fargate_service_ps {
+  _arguments \
+    '--cluster[ECS cluster name (default "fargate")]:' \
+    '--no-color[Disable color output]' \
+    '--region[AWS region (default "us-east-1")]:' \
+    '(-v --verbose)'{-v,--verbose}'[Verbose output]'
+}
+
+function _fargate_service_restart {
+  _arguments \
+    '--cluster[ECS cluster name (default "fargate")]:' \
+    '--no-color[Disable color output]' \
+    '--region[AWS region (default "us-east-1")]:' \
+    '(-v --verbose)'{-v,--verbose}'[Verbose output]'
+}
+
+function _fargate_service_scale {
+  _arguments \
+    '--cluster[ECS cluster name (default "fargate")]:' \
+    '--no-color[Disable color output]' \
+    '--region[AWS region (default "us-east-1")]:' \
+    '(-v --verbose)'{-v,--verbose}'[Verbose output]'
+}
+
+function _fargate_service_update {
+  _arguments \
+    '(-c --cpu)'{-c,--cpu}'[Amount of cpu units to allocate for each task]:' \
+    '(-m --memory)'{-m,--memory}'[Amount of MiB to allocate for each task]:' \
+    '--cluster[ECS cluster name (default "fargate")]:' \
+    '--no-color[Disable color output]' \
+    '--region[AWS region (default "us-east-1")]:' \
+    '(-v --verbose)'{-v,--verbose}'[Verbose output]'
+}
+
+
+function _fargate_task {
+  local -a commands
+
+  _arguments -C \
+    '--cluster[ECS cluster name (default "fargate")]:' \
+    '--no-color[Disable color output]' \
+    '--region[AWS region (default "us-east-1")]:' \
+    '(-v --verbose)'{-v,--verbose}'[Verbose output]' \
+    "1: :->cmnds" \
+    "*::arg:->args"
+
+  case $state in
+  cmnds)
+    commands=(
+      "info:Inspect tasks"
+      "list:List running task groups"
+      "logs:Show logs from tasks"
+      "ps:List running tasks"
+      "run:Run new tasks"
+      "stop:Stop tasks"
+    )
+    _describe "command" commands
+    ;;
+  esac
+
+  case "$words[1]" in
+  info)
+    _fargate_task_info
+    ;;
+  list)
+    _fargate_task_list
+    ;;
+  logs)
+    _fargate_task_logs
+    ;;
+  ps)
+    _fargate_task_ps
+    ;;
+  run)
+    _fargate_task_run
+    ;;
+  stop)
+    _fargate_task_stop
+    ;;
+  esac
+}
+
+function _fargate_task_info {
+  _arguments \
+    '(*-t *--task)'{\*-t,\*--task}'[Get info for specific task instances (can be specified multiple times)]:' \
+    '--cluster[ECS cluster name (default "fargate")]:' \
+    '--no-color[Disable color output]' \
+    '--region[AWS region (default "us-east-1")]:' \
+    '(-v --verbose)'{-v,--verbose}'[Verbose output]'
+}
+
+function _fargate_task_list {
+  _arguments \
+    '--cluster[ECS cluster name (default "fargate")]:' \
+    '--no-color[Disable color output]' \
+    '--region[AWS region (default "us-east-1")]:' \
+    '(-v --verbose)'{-v,--verbose}'[Verbose output]'
+}
+
+function _fargate_task_logs {
+  _arguments \
+    '--end[Latest time to return logs (e.g. 3y, 2021-01-20 12:00:00 EST]:' \
+    '--filter[Filter pattern to apply]:' \
+    '(-f --follow)'{-f,--follow}'[Poll logs and continuously print new events]' \
+    '--start[Earliest time to return logs (e.g. -1h, 2018-01-01 09:36:00 EST]:' \
+    '(*-t *--task)'{\*-t,\*--task}'[Show logs from specific task (can be specified multiple times)]:' \
+    '--cluster[ECS cluster name (default "fargate")]:' \
+    '--no-color[Disable color output]' \
+    '--region[AWS region (default "us-east-1")]:' \
+    '(-v --verbose)'{-v,--verbose}'[Verbose output]'
+}
+
+function _fargate_task_ps {
+  _arguments \
+    '--cluster[ECS cluster name (default "fargate")]:' \
+    '--no-color[Disable color output]' \
+    '--region[AWS region (default "us-east-1")]:' \
+    '(-v --verbose)'{-v,--verbose}'[Verbose output]'
+}
+
+function _fargate_task_run {
+  _arguments \
+    '(-c --cpu)'{-c,--cpu}'[Amount of cpu units to allocate for each task]:' \
+    '(*-e *--env)'{\*-e,\*--env}'[Environment variables to set \[e.g. KEY=value\] (can be specified multiple times)]:' \
+    '(-i --image)'{-i,--image}'[Docker image to run; if omitted Fargate will build an image from the Dockerfile in the current directory]:' \
+    '(-m --memory)'{-m,--memory}'[Amount of MiB to allocate for each task]:' \
+    '(-n --num)'{-n,--num}'[Number of task instances to run]:' \
+    '*--security-group-id[ID of a security group to apply to the task (can be specified multiple times)]:' \
+    '*--subnet-id[ID of a subnet in which to place the task (can be specified multiple times)]:' \
+    '--task-role[Name or ARN of an IAM role that the tasks can assume]:' \
+    '--cluster[ECS cluster name (default "fargate")]:' \
+    '--no-color[Disable color output]' \
+    '--region[AWS region (default "us-east-1")]:' \
+    '(-v --verbose)'{-v,--verbose}'[Verbose output]'
+}
+
+function _fargate_task_stop {
+  _arguments \
+    '(*-t *--task)'{\*-t,\*--task}'[Stop specific task instances (can be specified multiple times)]:' \
+    '--cluster[ECS cluster name (default "fargate")]:' \
+    '--no-color[Disable color output]' \
+    '--region[AWS region (default "us-east-1")]:' \
+    '(-v --verbose)'{-v,--verbose}'[Verbose output]'
+}
+
