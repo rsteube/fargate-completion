@@ -38,6 +38,11 @@ function _fargate_completion_memory {
   _values 'memory' 512 1024 2048 3072 4096 5120 6144 7168 8192 9216 10240 11264 12288 13312 14336 15360 16348
 }
 
+function _fargate_completion_zone {
+  zones=($(aws route53 list-hosted-zones | jq -r '.HostedZones[].Name | rtrimstr(".")' | sed 's_^_._'))
+  [ -z "$zones" ] || _values 'zone' $zones
+}
+
 
 function _fargate {
   local -a commands
@@ -172,6 +177,7 @@ function _fargate_certificate_list {
 }
 
 function _fargate_certificate_request {
+  _fargate_completion_zone
   _arguments \
     '(*-a *--alias)'{\*-a,\*--alias}'[Additional domain names to be included in the certificate (can be specified multiple times)]:' \
     '--cluster[ECS cluster name (default "fargate")]:' \
