@@ -74,6 +74,11 @@ function _fargate_completion_role {
   [ -z "$roles" ] || _values 'role' $roles
 }
 
+function _fargate_completion_env {
+  keys=($(fargate service env list $line | sed 's_=.*__'))
+  [ -z "$keys" ] || _values 'key' $keys
+}
+
 function _fargate {
   local -a commands
 
@@ -491,16 +496,18 @@ function _fargate_service_env_set {
     '--cluster[ECS cluster name (default "fargate")]:cluster:_fargate_completion_cluster' \
     '--no-color[Disable color output]' \
     '--region[AWS region (default "us-east-1")]:region:_fargate_completion_region' \
-    '(-v --verbose)'{-v,--verbose}'[Verbose output]'
+    '(-v --verbose)'{-v,--verbose}'[Verbose output]' \
+    '1: :_fargate_completion_service'
 }
 
 function _fargate_service_env_unset {
   _arguments \
-    '(*-k *--key)'{\*-k,\*--key}'[Environment variable keys to unset \[e.g. KEY, NGINX_PORT\]]:' \
+    '(*-k *--key)'{\*-k,\*--key}'[Environment variable keys to unset \[e.g. KEY, NGINX_PORT\]]:key:_fargate_completion_env' \
     '--cluster[ECS cluster name (default "fargate")]:cluster:_fargate_completion_cluster' \
     '--no-color[Disable color output]' \
     '--region[AWS region (default "us-east-1")]:region:_fargate_completion_region' \
-    '(-v --verbose)'{-v,--verbose}'[Verbose output]'
+    '(-v --verbose)'{-v,--verbose}'[Verbose output]' \
+    '1: :_fargate_completion_service'
 }
 
 function _fargate_service_info {
