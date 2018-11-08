@@ -684,7 +684,8 @@ function _fargate_task_run {
     '--cluster[ECS cluster name (default "fargate")]:cluster:_fargate_completion_cluster' \
     '--no-color[Disable color output]' \
     '--region[AWS region (default "us-east-1")]:region:_fargate_completion_region' \
-    '(-v --verbose)'{-v,--verbose}'[Verbose output]'
+    '(-v --verbose)'{-v,--verbose}'[Verbose output]' \
+    '1:name:()'
 }
 
 function _fargate_task_stop {
