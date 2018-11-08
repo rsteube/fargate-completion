@@ -557,7 +557,8 @@ function _fargate_service_scale {
     '--no-color[Disable color output]' \
     '--region[AWS region (default "us-east-1")]:region:_fargate_completion_region' \
     '(-v --verbose)'{-v,--verbose}'[Verbose output]' \
-    '1: :_fargate_completion_service'
+    '1: :_fargate_completion_service' \
+    '2: :(+-2 +-1 0 +1 +2)'
 }
 
 function _fargate_service_update {
