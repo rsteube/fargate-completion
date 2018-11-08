@@ -427,7 +427,8 @@ function _fargate_service_deploy {
     '--cluster[ECS cluster name (default "fargate")]:cluster:_fargate_completion_cluster' \
     '--no-color[Disable color output]' \
     '--region[AWS region (default "us-east-1")]:region:_fargate_completion_region' \
-    '(-v --verbose)'{-v,--verbose}'[Verbose output]'
+    '(-v --verbose)'{-v,--verbose}'[Verbose output]' \
+    '1: :_fargate_completion_service'
 }
 
 function _fargate_service_destroy {
